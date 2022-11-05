@@ -60,6 +60,6 @@ while checkLoop:
     file.close()
      
     # 1h delay = 3600
-    time.sleep(3)
+    time.sleep(3600)
     hours += 1
     
