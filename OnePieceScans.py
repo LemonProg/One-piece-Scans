@@ -13,23 +13,32 @@ current_time = dt.strftime("%H:%M:%S")
 
 hours = 0
 
+# Create a new .json file if not exist
+onePiece = feedparser.parse('https://www.japscan.me/rss/one-piece/')
+    
+titleLast = onePiece.entries[0].title
+linkLast = onePiece.entries[0].link
+dateLast = onePiece.entries[0].published
+
+onePieceLast = {
+    "title": titleLast,
+    "link": linkLast,
+    "date": dateLast,
+}
+
+file = open("save.json", "w+") 
+json.dump(onePieceLast, file, indent = 4)
+file.close()
+
+# loop
 while checkLoop:
     onePiece = feedparser.parse('https://www.japscan.me/rss/one-piece/')
-    
-    titleLast = onePiece.entries[0].title
-    linkLast = onePiece.entries[0].link
-    dateLast = onePiece.entries[0].published
-    
-    
+      
     # Lecture des infos dans save.json
-    try:
-        with open('save.json', 'r') as f:
-            onePieceCheck = json.load(f)
-    except:
-        input("You must create a JSON file named 'save.json' in the same folder as the script !")
-        exit()
 
-        
+    with open('save.json', 'r') as f:
+        onePieceCheck = json.load(f)
+
     
     # Verif si les infos du json sont identique au infos du RSS 
     if onePieceCheck['title'] == titleLast:
@@ -46,17 +55,11 @@ while checkLoop:
 
     # Dump des infos du last scan dans save.json
 
-    onePieceLast = {
-        "title": titleLast,
-        "link": linkLast,
-        "date": dateLast,
-    }
-
     file = open("save.json", "w") 
     json.dump(onePieceLast, file, indent = 4)
     file.close()
      
     # 1h delay = 3600
-    time.sleep(3600)
+    time.sleep(3)
     hours += 1
     
